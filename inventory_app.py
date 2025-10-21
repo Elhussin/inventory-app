@@ -53,7 +53,7 @@ def fetch_products(search_text=""):
     if search_text:
         c.execute("""
             SELECT * FROM products
-            WHERE name LIKE ? OR code LIKE ?
+            WHERE description LIKE ? OR code LIKE ?
         """, (f"%{search_text}%", f"%{search_text}%"))
     else:
         c.execute("SELECT * FROM products")
