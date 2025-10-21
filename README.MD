@@ -604,8 +604,28 @@ pyinstaller --onefile --windowed --noconsole --name="InventorySystem" --hidden-i
 @REM pip install reportlab pyinstaller
 
 @REM # 2. شغّل الأمر
-@REM pyinstaller --onefile --windowed --noconsole --name="InventorySystem" inventory_system.py
+@REM pyinstaller --onefile --windowed --noconsole --name="InventorySystem" inventory.py
 
 @REM # 3. الملف النهائي في: dist\InventorySystem.exe -->
 
 <!-- wineconsole "cmd.exe /c InventorySystem.exe" -->
+
+
+<!-- 
+# 1. ثبت المكتبات
+pip3 install reportlab pyinstaller
+
+# 2. ابنِ البرنامج
+pyinstaller --onefile --windowed inventory.py
+
+# 3. شغّل البرنامج
+chmod +x dist/inventory
+./dist/inventory -->
+
+
+<!-- pyinstaller --onefile \
+  --hidden-import=PIL._tkinter_finder \
+  --hidden-import=PIL.ImageTk \
+  --hidden-import=PIL.Image \
+  --hidden-import=PIL._imagingtk \
+  inventory.py -->
