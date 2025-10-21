@@ -1,0 +1,5 @@
+*node_modules/*
+*.log
+*.env
+*node/node_modules/*
+*inventory.db
