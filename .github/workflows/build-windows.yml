@@ -27,7 +27,8 @@ jobs:
 
       - name: Build executable
         run: |
-          pyinstaller --onefile --windowed --name "Inventory" inventory.py
+          pyinstaller --onefile --windowed --name "Inventory" 'script/inventory.py'
+          pyinstaller --onefile --windowed --name "Inventory" 'script/redCSV.py'
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
