@@ -27,7 +27,7 @@ jobs:
 
       - name: Build executable
         run: |
-          pyinstaller --onefile --windowed --name "InventoryApp" inventory_app.py
+          pyinstaller --onefile --windowed --name "Inventory" inventory.py
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
