@@ -36,7 +36,7 @@
 #           name: InventoryApp-Windows
 #           path: dist/InventoryApp.exe
 
-name: Build Python Executables
+name: Build Executables
 
 on:
   push:
@@ -45,9 +45,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-windows:
-    runs-on: windows-latest
-    name: Build Windows EXE
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        python-version: [3.11]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -55,38 +59,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pyinstaller
-          if (Test-Path requirements.txt) { pip install -r requirements.txt }
-
-      - name: Build Windows executables
-        run: |
-          pyinstaller --onefile --windowed --name "Inventory" "script/inventory.py"
-          pyinstaller --onefile --windowed --name "REDCSV" "script/redCSV.py"
-
-      - name: Upload Windows artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: InventoryApp-Windows
-          path: |
-            dist/Inventory.exe
-            dist/REDCSV.exe
-
-  build-linux:
-    runs-on: ubuntu-latest
-    name: Build Linux Executable
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+          python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
         run: |
@@ -94,13 +67,22 @@ jobs:
           pip install pyinstaller
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Build Linux executables
+      - name: Clean previous builds
         run: |
-          pyinstaller --onefile --name "Inventory" "script/inventory.py"
-          pyinstaller --onefile --name "REDCSV" "script/redCSV.py"
+          rm -rf dist build __pycache__ || true
 
-      - name: Upload Linux artifacts
+      - name: Build Inventory executable
+        run: |
+          pyinstaller --onefile --windowed --name "Inventory" "script/inventory.py"
+
+      - name: Build REDCSV executable
+        run: |
+          pyinstaller --onefile --windowed --name "REDCSV" "script/redCSV.py"
+
+      - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: InventoryApp-Linux
-          path: dist/*
+          name: ${{ matrix.os }}-Executables
+          path: |
+            dist/Inventory.exe
+            dist/REDCSV.exe
