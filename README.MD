@@ -616,11 +616,11 @@ pyinstaller --onefile --windowed --noconsole --name="InventorySystem" --hidden-i
 pip3 install reportlab pyinstaller
 
 # 2. ابنِ البرنامج
-pyinstaller --onefile --windowed inventory.py
+pyinstaller --onefile --windowed redCSV.py
 
 # 3. شغّل البرنامج
-chmod +x dist/inventory
-./dist/inventory -->
+chmod +x dist/redCSV 
+./dist/redCSV -->
 
 
 <!-- pyinstaller --onefile \
@@ -629,3 +629,7 @@ chmod +x dist/inventory
   --hidden-import=PIL.Image \
   --hidden-import=PIL._imagingtk \
   inventory.py -->
+
+
+<!-- chmod +x dist/import_csv
+./dist/import_csv  -->

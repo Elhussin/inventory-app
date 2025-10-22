@@ -3,3 +3,4 @@
 *.env
 *node/node_modules/*
 *inventory.db
+*__pycache__
