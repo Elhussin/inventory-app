@@ -24,7 +24,13 @@ COLUMNS = [
     "id", "name", "code", "description", "cost", "retail",
     "required_qty", "good_qty", "damaged_qty", "gift", "total_qty", "note"
 ]
-
+# SELECT        dbo.v_ItemCardtaha.Code, dbo.v_ItemCardtaha.Description as name, SUM(dbo.v_ItemCardtaha.Incoming - dbo.v_ItemCardtaha.Outgoing) AS required_qty, dbo.Product.CostPrice as cost, dbo.Product.RetailPrice as retail
+# FROM            dbo.v_ItemCardtaha INNER JOIN
+#                          dbo.Product ON dbo.v_ItemCardtaha.Code = dbo.Product.Code
+# WHERE        (dbo.v_ItemCardtaha.DepName = N'Jeddah Store') AND (dbo.v_ItemCardtaha.MainGroupID = 38 OR
+#                          dbo.v_ItemCardtaha.MainGroupID = 58)
+# GROUP BY dbo.v_ItemCardtaha.Description, dbo.v_ItemCardtaha.Code, dbo.Product.RetailPrice, dbo.Product.CostPrice
+# HAVING        (SUM(dbo.v_ItemCardtaha.Incoming - dbo.v_ItemCardtaha.Outgoing) <> 0)
 
 EDITABLE_FIELDS = {"good_qty", "damaged_qty", "gift", "note"}
 # تحضير فهرس أول عمود قابل للتعديل (مرة واحدة عند بدء البرنامج)
