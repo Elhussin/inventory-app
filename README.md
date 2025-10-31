@@ -165,9 +165,15 @@ If you have any questions, need technical support, or want to discuss features, 
 * **GitHub Issues:** [Open an Issue here](https://github.com/Elhussin/inventory-app/issues) (The preferred way to report bugs)
 
 
-## 🖼️ Optional: Screenshot
+## 🖼️ Screenshot
+![Main Dashboard](https://raw.githubusercontent.com/Elhussin/inventory-app/v2/app/1.png)
+![Add Product](https://raw.githubusercontent.com/Elhussin/inventory-app/v2/app/2.png)
+## 🖼️ Screenshot
+
 <img src="https://raw.githubusercontent.com/Elhussin/inventory-app/v2/app/1.png" width="700" />
 <img src="https://raw.githubusercontent.com/Elhussin/inventory-app/v2/app/2.png" width="700" />
+
+
 
 
 
