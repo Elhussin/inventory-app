@@ -3,36 +3,27 @@ from dotenv import load_dotenv
 import os
 import sqlite3
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import messagebox
+from ttkbootstrap import ttk
+# تحميل المتغيرات من ملف .env تلقائيًا
+load_dotenv()  
 
-# =========================
-# إعداد الاتصال بـ SQL Server
-# =========================
-load_dotenv()
 server = os.getenv('SERVER')
 database = os.getenv('DATABASE')
 username = os.getenv('DBUSERNAME')
 password = os.getenv('PASSWORD')
-print(server, database, username, password)
 
+# إعداد الاتصال
 connection_string = (
-    "DRIVER={ODBC Driver 17 for SQL Server};"
-    f"SERVER={server};"
-    f"DATABASE={database};"
-    f"UID={username};"
-    f"PWD={password};"
-    "Encrypt=no;"
-    "TrustServerCertificate=yes;"
-    # "SSLProtocol=0;"
-    # "ServerSPN=;"
+        f'DRIVER={{ODBC Driver 17 for SQL Server}};'
+        f'SERVER={server};'
+        f'DATABASE={database};'
+        f'UID={username};'
+        f'PWD={password};'
+        'Encrypt=no;'  # غيّرها إلى yes لو السيرفر يتطلب اتصال مشفر
+        'TrustServerCertificate=yes;'
 )
-# connection_string = "DSN=MYMSSQL;"
 
-    # 'Encrypt=no;'
-    # 'TrustServerCertificate=yes;'
-# =========================
-# قاعدة بيانات SQLite
-# =========================
 DB_FILE = "inventory.db"
 
 def create_table():
@@ -68,8 +59,9 @@ def fetch_from_sqlserver():
         print("Connected to SQL Server")
         cursor.execute("""
             SELECT 
-                dbo.v_ItemCardtaha.Code, 
-                dbo.v_ItemCardtaha.Description AS name, 
+                top 10
+                                dbo.v_ItemCardtaha.Code, 
+                dbo.v_ItemCardtaha.Description AS description, 
                 SUM(dbo.v_ItemCardtaha.Incoming - dbo.v_ItemCardtaha.Outgoing) AS required_qty, 
                 dbo.Product.CostPrice AS cost, 
                 dbo.Product.RetailPrice AS retail
@@ -112,13 +104,25 @@ def insert_or_update_data(rows, mode="update"):
                 UPDATE products
                 SET name=?, cost=?, retail=?, required_qty=?
                 WHERE code=?
-            """, (name, cost, retail, required_qty, code))
+            """, (
+                name, 
+                float(cost) if cost is not None else 0.0, 
+                float(retail) if retail is not None else 0.0, 
+                float(required_qty) if required_qty is not None else 0.0,
+                code
+            ))
             updated += 1
         else:
             c.execute("""
                 INSERT INTO products (code, name, cost, retail, required_qty)
                 VALUES (?, ?, ?, ?, ?)
-            """, (code, name, cost, retail, required_qty))
+            """, (
+                code, 
+                name, 
+                float(cost) if cost is not None else 0.0, 
+                float(retail) if retail is not None else 0.0, 
+                float(required_qty). if required_qty is not None else 0.0
+            ))
             inserted += 1
 
     conn.commit()
@@ -158,6 +162,8 @@ def update_data(mode):
     if not rows:
         messagebox.showwarning("Warning", "No data found!")
         return
+
+    print(rows)
 
     inserted, updated = insert_or_update_data(rows, mode)
     lbl_stats.config(
