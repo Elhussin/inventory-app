@@ -13,16 +13,23 @@ server = os.getenv('SERVER')
 database = os.getenv('DATABASE')
 username = os.getenv('DBUSERNAME')
 password = os.getenv('PASSWORD')
+print(server, database, username, password)
 
 connection_string = (
-    f'DRIVER={{ODBC Driver 17 for SQL Server}};'
-    f'SERVER={server};'
-    f'DATABASE={database};'
-    f'UID={username};'
-    f'PWD={password};'
-    'Encrypt=no;TrustServerCertificate=yes;'
+    "DRIVER={ODBC Driver 17 for SQL Server};"
+    f"SERVER={server};"
+    f"DATABASE={database};"
+    f"UID={username};"
+    f"PWD={password};"
+    "Encrypt=no;"
+    "TrustServerCertificate=yes;"
+    # "SSLProtocol=0;"
+    # "ServerSPN=;"
 )
+# connection_string = "DSN=MYMSSQL;"
 
+    # 'Encrypt=no;'
+    # 'TrustServerCertificate=yes;'
 # =========================
 # قاعدة بيانات SQLite
 # =========================
@@ -58,6 +65,7 @@ def fetch_from_sqlserver():
     try:
         cnxn = pyodbc.connect(connection_string)
         cursor = cnxn.cursor()
+        print("Connected to SQL Server")
         cursor.execute("""
             SELECT 
                 dbo.v_ItemCardtaha.Code, 
@@ -76,6 +84,7 @@ def fetch_from_sqlserver():
         cnxn.close()
         return rows
     except Exception as e:
+        print(e)
         messagebox.showerror("SQL Error", f"❌ Error fetching data: {e}")
         return []
 
@@ -136,23 +145,23 @@ style.configure("Treeview.Heading", font=("Segoe UI", 10, "bold"))
 # ----------- دوال الواجهة -----------
 def update_data(mode):
     confirm_msg = (
-        "سيتم جلب البيانات مباشرة من SQL Server.\n\n"
-        "هل تريد المتابعة؟"
+        "Will fetch data from SQL Server.\n\n"
+        "Do you want to continue?"
     )
     if mode == "new":
-        confirm_msg += "\n\n⚠️ سيتم حذف كل البيانات السابقة من قاعدة البيانات المحلية (SQLite)."
+        confirm_msg += "\n\n⚠️ Will delete all previous data from local database (SQLite)."
 
-    if not messagebox.askokcancel("تأكيد العملية", confirm_msg):
+    if not messagebox.askokcancel("Confirmation", confirm_msg):
         return
 
     rows = fetch_from_sqlserver()
     if not rows:
-        messagebox.showwarning("تنبيه", "لم يتم العثور على بيانات!")
+        messagebox.showwarning("Warning", "No data found!")
         return
 
     inserted, updated = insert_or_update_data(rows, mode)
     lbl_stats.config(
-        text=f"✅ تم تنفيذ العملية بنجاح | 🆕 مضافة: {inserted} | 🔁 محدّثة: {updated}"
+        text=f"✅ Done | 🆕 Added: {inserted} | 🔁 Updated: {updated}"
     )
 
     refresh_tree(rows)
@@ -169,10 +178,10 @@ def refresh_tree(rows):
 frame_buttons = ttk.Frame(root)
 frame_buttons.pack(pady=10)
 
-btn_update = ttk.Button(frame_buttons, text="🔁 تحديث البيانات", command=lambda: update_data("update"))
+btn_update = ttk.Button(frame_buttons, text="� Update Data", command=lambda: update_data("update"))
 btn_update.grid(row=0, column=0, padx=10)
 
-btn_new = ttk.Button(frame_buttons, text="🆕 إنشاء جديد", command=lambda: update_data("new"))
+btn_new = ttk.Button(frame_buttons, text="🆕 Create New", command=lambda: update_data("new"))
 btn_new.grid(row=0, column=1, padx=10)
 
 lbl_stats = ttk.Label(root, text="", font=("Segoe UI", 10))
