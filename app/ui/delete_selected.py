@@ -1,6 +1,6 @@
 
 from tkinter import messagebox
-from utils.dp_utils import delete_product
+from app.utils.dp_utils import delete_product
 
 
 

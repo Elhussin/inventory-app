@@ -1,4 +1,4 @@
-from .dp_utils import fetch_products
+from app.utils.dp_utils import fetch_products
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import landscape, A4
 from reportlab.lib.styles import getSampleStyleSheet

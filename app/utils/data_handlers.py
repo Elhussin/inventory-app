@@ -1,6 +1,6 @@
 # data_handlers.py
-from utils.dp_utils import fetch_products 
-from constants.index import DB_FILE
+from app.utils.dp_utils import fetch_products 
+from app.constants.index import DB_FILE
 import sqlite3
 # -------------------------
 # Load / Insert helper
@@ -107,10 +107,9 @@ def search_products(tree, search_var, FIRST_EDITABLE_INDEX):
 # db_operations.py / data_handlers.py
 
 def update_product_full(product_id, data):
-    # data هو قاموس يحتوي على جميع حقول الإدخال
+
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
-    print ("you call me")
     try:
         c.execute("""
             UPDATE products SET

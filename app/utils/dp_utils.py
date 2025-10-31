@@ -1,6 +1,6 @@
 import sqlite3
 # from constants import DB_FILE
-from constants.index import DB_FILE
+from app.constants.index import DB_FILE
 
 # -------------------------
 # Database helpers

@@ -36,17 +36,27 @@ jobs:
       - name: Build executables
         run: |
           if [[ "${{ runner.os }}" == "Windows" ]]; then
-              pyinstaller --onefile --windowed --name "Inventory" script/inventory.py
-              pyinstaller --onefile --windowed --name "REDCSV" script/redCSV.py
+              pyinstaller --onefile --windowed --noconsole --name="Inventory" \
+              --add-data="app:app" \
+              --hidden-import="PIL._tkinter_finder" \
+              --hidden-import="PIL" \
+              --hidden-import="Pillow" \
+              --additional-hooks-dir=. \
+              main.py
+
               mkdir -p dist_win
               mv dist/Inventory.exe dist_win/
-              mv dist/REDCSV.exe dist_win/
+
           else
-              pyinstaller --onefile --name "Inventory" script/inventory.py
-              pyinstaller --onefile --name "REDCSV" script/redCSV.py
+              pyinstaller --onefile --windowed --noconsole --name="Inventory" \
+              --add-data="app:app" \
+              --hidden-import="PIL._tkinter_finder" \
+              --hidden-import="PIL" \
+              --hidden-import="Pillow" \
+              --additional-hooks-dir=. \
+              main.py
               mkdir -p dist_linux
               mv dist/Inventory dist_linux/
-              mv dist/REDCSV dist_linux/
           fi
         shell: bash
 

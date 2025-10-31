@@ -2,9 +2,9 @@
 import tkinter as tk
 from tkinter import messagebox
 import ttkbootstrap as tb
-from utils.dp_utils import update_product_full
+from app.utils.dp_utils import update_product_full
 
-from constants.index import COLUMNS,NUMERIC_FIELDS
+from app.constants.index import COLUMNS,NUMERIC_FIELDS
 
 _edit_entry = None
 

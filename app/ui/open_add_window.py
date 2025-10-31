@@ -2,8 +2,8 @@
 from tkinter import messagebox
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
-from utils.dp_utils import insert_product 
-from constants.index import Fields as fields, FONT
+from app.utils.dp_utils import insert_product 
+from app.constants.index import Fields as fields, FONT
 
 
 

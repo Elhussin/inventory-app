@@ -2,7 +2,7 @@
 import tkinter as tk
 import ttkbootstrap as tb
 from ttkbootstrap.constants import *
-from constants.index import COLUMNS,column_display_names,FONT
+from app.constants.index import COLUMNS,column_display_names,FONT
 
 # -------------------------
 # UI Setup Functions

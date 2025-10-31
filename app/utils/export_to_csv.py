@@ -1,8 +1,8 @@
-from .dp_utils import fetch_products
+from app.utils.dp_utils import fetch_products
 from tkinter import filedialog, messagebox
 import csv
 
-from constants.index import COLUMNS
+from app.constants.index import COLUMNS
 # -------------------------
 # Export functions
 # -------------------------

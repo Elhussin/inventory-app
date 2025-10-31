@@ -11,7 +11,7 @@ NUMERIC_FIELDS = {"cost", "retail", "required_qty", "good_qty", "damaged_qty", "
 
 column_display_names = {
     "id": "ID",
-    "name": "Product Name",
+    # "name": "Product Name",
     "code": "Code",
     "description": "Description",
     "cost": "Cost",
