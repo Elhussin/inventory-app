@@ -79,6 +79,12 @@ def sync_csv_to_db(csv_file, mode="update"):
                 result = c.fetchone()
                 if result and result[0] > 0:
                     skipped += 1
+                    c.execute("""
+                    UPDATE products
+                    SET required_qty=?
+                    WHERE code=?
+                    """,(0, code))
+
                     result_rows.append(('N/A', code, f'skipped (qty={result[0]})'))
                     print(f"⏭️ Skipped deletion of {code} (total_qty = {result[0]})")
                     continue

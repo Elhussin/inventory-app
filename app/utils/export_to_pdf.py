@@ -4,7 +4,7 @@ from reportlab.lib.pagesizes import landscape, A4
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib.enums import TA_CENTER
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from tkinter import filedialog
 from datetime import datetime
 from tkinter import filedialog, messagebox
@@ -36,10 +36,17 @@ def export_all_to_pdf():
         total_damaged = sum(int(r["damaged_qty"] or 0) for r in rows)
         total_gift = sum(int(r["gift"] or 0) for r in rows)
         total_stock = sum(int(r["total_qty"] or 0) for r in rows)
+        total_cost_reqired=sum(int(r["required_qty"] or 0)*float(r["cost"] or 0) for r in rows)
+        total_cost_good=sum(int(r["good_qty"] or 0)*float(r["cost"] or 0) for r in rows)
+        total_cost_damaged=sum(int(r["damaged_qty"] or 0)*float(r["cost"] or 0) for r in rows)
+        total_cost_gift=sum(int(r["gift"] or 0)*float(r["cost"] or 0) for r in rows)
+        total_cost_stock=sum(int(r["total_qty"] or 0)*float(r["cost"] or 0) for r in rows)
+
         
         summary_table = Table([
             ["Summary", "Required", "Good", "Damaged", "Gift", "Total Stock"],
-            ["Totals", f"{total_required:,}", f"{total_good:,}", f"{total_damaged:,}", f"{total_gift:,}", f"{total_stock:,}"]
+            ["Totals", f"{total_required:,}", f"{total_good:,}", f"{total_damaged:,}", f"{total_gift:,}", f"{total_stock:,}"],
+            ["Cost", f"SAR{total_cost_reqired:.2f}", f"SAR{total_cost_good:.2f}", f"SAR{total_cost_damaged:.2f}", f"SAR{total_cost_gift:.2f}", f"SAR{total_cost_stock:.2f}"]
         ], colWidths=[2*inch, 1.3*inch, 1.3*inch, 1.3*inch, 1.3*inch, 1.3*inch])
         
         summary_table.setStyle(TableStyle([
@@ -69,8 +76,8 @@ def export_all_to_pdf():
                 str(r["name"])[:22], 
                 str(r["code"]), 
                 (str(r["description"])[:32] if r["description"] else ""),
-                f"${float(r['cost'] or 0):.2f}", 
-                f"${float(r['retail'] or 0):.2f}",
+                f"SAR{float(r['cost'] or 0):.2f}", 
+                f"SAR{float(r['retail'] or 0):.2f}",
                 str(int(r["required_qty"] or 0)), 
                 str(int(r["good_qty"] or 0)), 
                 str(int(r["damaged_qty"] or 0)),
@@ -119,6 +126,13 @@ def export_mismatch_to_pdf():
         return
     rows = fetch_products()
     mismatched = [r for r in rows if int(r["required_qty"] or 0) != int(r["total_qty"] or 0)]
+    total_qut = sum(int(r["required_qty"] or 0) for r in mismatched)
+    total_found = sum(int(r["total_qty"] or 0) for r in mismatched)
+    req_amount = sum(float(r["cost"] or 0) * int(r["required_qty"] or 0) for r in mismatched)
+    found_amount = sum(float(r["cost"] or 0) * int(r["total_qty"] or 0) for r in mismatched)
+    amount=found_amount-req_amount
+    
+
     
     if not mismatched:
         messagebox.showinfo("No Mismatch", "ℹ️ No mismatched products found.")
@@ -133,7 +147,8 @@ def export_mismatch_to_pdf():
         title_style = ParagraphStyle('Title', parent=styles['Heading1'], alignment=TA_CENTER, fontSize=20, textColor=colors.HexColor('#e74c3c'))
         elements.append(Paragraph("⚠️ Mismatched Inventory Report", title_style))
         elements.append(Spacer(1, 12))
-        
+
+
         # Date & Warning
         subtitle_style = ParagraphStyle('Subtitle', parent=styles['Normal'], alignment=TA_CENTER, fontSize=11, textColor=colors.HexColor('#7f8c8d'))
         elements.append(Paragraph(f"Generated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", subtitle_style))
@@ -141,6 +156,15 @@ def export_mismatch_to_pdf():
         
         warning_style = ParagraphStyle('Warning', parent=styles['Normal'], alignment=TA_CENTER, fontSize=11, textColor=colors.HexColor('#e74c3c'), fontName='Helvetica-Bold')
         warning = Paragraph(f"⚠️ {len(mismatched)} products have quantity mismatches (Required ≠ Total)", warning_style)
+
+                # resualt
+        resault_style=ParagraphStyle("Result",parent=styles['Normal'], alignment=TA_LEFT, fontSize=11, textColor=colors.HexColor('#0e0e0e'), fontName='Helvetica-Bold')
+        elements.append(Paragraph(f"Total Required : {total_qut}", resault_style))
+        elements.append(Paragraph(f"Total Found : {total_found}", resault_style))
+        elements.append(Paragraph(f"Found Amount: {found_amount:.2f} SAR", resault_style))
+        elements.append(Paragraph(f"Required Amount: {req_amount:.2f} SAR", resault_style))
+        elements.append(Paragraph(f"Total Amount: {amount:.2f} SAR", resault_style))    
+
         elements.append(warning)
         elements.append(Spacer(1, 18))
 
