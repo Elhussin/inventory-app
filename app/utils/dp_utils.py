@@ -21,9 +21,10 @@ def init_db():
             retail REAL,
             required_qty INTEGER,
             good_qty INTEGER,
+            gift INTEGER,
             damaged_qty INTEGER,
             total_qty INTEGER,
-            gift INTEGER,
+
             note TEXT
         )
     """)
@@ -95,14 +96,14 @@ def update_product_full(data_dict):
 
 def insert_product(data_tuple):
     """
-    data_tuple: (name, code, description, cost, retail, required_qty, good_qty, damaged_qty, total_qty, gift, note)
+    data_tuple: (name, code, description, cost, retail, required_qty, good_qty, damaged_qty, gift, total_qty, note)
     """
     try:
         conn = sqlite3.connect(DB_FILE)
         c = conn.cursor()
-        # (name, code, description, cost, retail, required_qty, good_qty, damaged_qty, total_qty, gift, note)
+        # (name, code, description, cost, retail, required_qty, good_qty, damaged_qty, gift, total_qty, note)
         c.execute("""
-            INSERT INTO products (name, code, description, cost, retail, required_qty, good_qty, damaged_qty, total_qty, gift, note)
+            INSERT INTO products (name, code, description, cost, retail, required_qty, good_qty, damaged_qty, gift, total_qty, note)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, data_tuple)
         conn.commit()

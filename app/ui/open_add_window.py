@@ -81,7 +81,7 @@ def open_add_window(root, load_data_func, tree, search_term, stat_vars):
             note = entries["note"].get().strip()
 
             total_qty = good_qty + damaged_qty + gift
-            data = (name, code, description, cost, retail, required_qty, good_qty, damaged_qty, total_qty, gift, note)
+            data = (name, code, description, cost, retail, required_qty, good_qty, damaged_qty, gift, total_qty,  note)
             
             ok, msg = insert_product(data)
             if not ok:

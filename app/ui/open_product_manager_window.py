@@ -7,7 +7,7 @@ import ttkbootstrap as tb
 from ttkbootstrap.constants import *
 import sqlite3
 from app.constants.index import column_display_names as COLUMNS_DATA, EDITABLE_FIELDS
-from app.utils.data_handlers import fetch_products, fetch_product_by_id, update_product_full
+from app.utils.data_handlers import fetch_products, fetch_product_by_id
 
 # ------------------
 #  define the main window function
